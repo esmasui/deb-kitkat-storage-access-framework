@@ -1,0 +1,65 @@
+if (!project.hasProperty('aspectjVersion')) {
+    return
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+configurations {
+    ajc {
+        visible false
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.aspectj') {
+                details.useVersion aspectjVersion
+            }
+        }
+    }
+}
+
+
+dependencies {
+    compile "org.aspectj:aspectjrt:${project.aspectjVersion}"
+    ajc "org.aspectj:aspectjtools:${project.aspectjVersion}"
+}
+
+//@see http://stackoverflow.com/questions/17245402/android-new-aspectj-system-gradle-and-aspectj
+android.applicationVariants.all { variant ->
+
+
+    variant.javaCompile.doLast {
+
+        def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
+
+        def iajcClasspath = variant.javaCompile.classpath.asPath + ":" + androidSdk
+        configurations.compile.dependencies.each { dep ->
+            if(dep.hasProperty("dependencyProject")) {
+                iajcClasspath += ":" + dep.dependencyProject.buildDir + "/bundles/release/classes.jar"
+            }
+        }
+
+        ant.taskdef( resource:"org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", classpath: configurations.ajc.asPath)
+        ant.iajc (
+                source:sourceCompatibility,
+                target:targetCompatibility,
+                destDir:"${project.buildDir}/classes/${variant.dirName}",
+                maxmem:"512m",
+                fork:"true",
+                //aspectPath:configurations.aspects.asPath,
+                //inpath:configurations.ajInpath.asPath,
+                sourceRootCopyFilter:"**/.svn/*,**/*.java",
+                classpath:iajcClasspath
+        ){
+            sourceroots{
+                android.sourceSets.main.java.srcDirs.each{
+                    pathelement(location:it.absolutePath)
+                }
+                pathelement(location:"${project.buildDir}/source/r/${variant.dirName}")
+            }
+        }
+    }
+}

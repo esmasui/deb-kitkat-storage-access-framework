@@ -1,0 +1,29 @@
+# Java Class Files
+*.class
+
+# Android Artifacts
+*.ap_
+*.dex
+local.properties
+
+# IntelliJ IDEA Project Settings
+*.iws
+*.iml
+*.ipr
+
+# Build Directories
+bin/
+gen/
+out/
+.idea/
+obj/
+.gradle/
+build/
+.apt_generated/
+
+#Mac folder files
+.DS_Store
+
+# Visual Studio Solution User Options
+*.suo
+*.user

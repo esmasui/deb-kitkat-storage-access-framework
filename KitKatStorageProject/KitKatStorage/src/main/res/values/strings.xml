@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KitKatStorage</string>
+    <string name="action_settings">Settings</string>
+    <string name="root_summary">SkyDrive</string>
+    <string name="title">SkyDrive</string>
+
+</resources>

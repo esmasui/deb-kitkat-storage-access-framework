@@ -1,0 +1,31 @@
+第15回 デ部 ミーティング KitKat 用 Storage Access Frameworkのデモアプリケーション
+
+SkyDriveをバックエンドにしたStorage Access Frameworkのデモアプリケーション。
+
+
+## Storage Accees Frameworkの要点
+
+新）システムUIが横断的にContentProvider経由でデータを扱う（アプリはUIを用意しない）
+旧）アプリ毎にUIを用意する
+
+これまでは、データの共有のためにアプリ毎にUIをつくる必要があった。
+例えば画像を共有する場合、各アプリでギャラリー的なUIをつくる必要があった。
+KitKatではDocumentsのコントラクトに従ったContentProviderを用意すればいい。
+
+
+## 問題
+
+1. 削除を実行するとセキュリティエラーだと言われる。なぜ？
+2. DocumentsのシステムUIにはリフレッシュを行うためのアクションがないので、情報を最新に保つ仕組みが必要
+    - アクセスのたびにネットワークから取ってくる（遅い）
+    - バックグラウンドでフェッチしておく（クラウドに保存されうるファイルの容量を考えると現実的ではない？）
+    - その他
+
+
+## 参考
+1. http://developer.android.com/guide/topics/providers/document-provider.html
+2. http://tools.oesf.biz/android-4.4.0_r1.0/xref/packages/providers/DownloadProvider/src/com/android/providers/downloads/DownloadStorageProvider.java
+3. http://tools.oesf.biz/android-4.4.0_r1.0/xref/frameworks/base/packages/ExternalStorageProvider/src/com/android/externalstorage/ExternalStorageProvider.java
+4. https://github.com/liveservices/LiveSDK-for-Android/
+5. https://account.live.com/developers/applications/create
+
